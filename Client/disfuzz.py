@@ -338,7 +338,7 @@ def start_project_instance(project_name, start_as_master=False, use_tmux=False):
                 start_cmd += " -master"
                 window_name = "master"
 
-            tmux_server = tmuxp.Server(socket_path=get_project_meta_path(project_name) + "/.tmux_socket")
+            tmux_server = tmuxp.cli.Server(socket_path=get_project_meta_path(project_name) + "/.tmux_socket")
 
             if tmux_server.has_session(project_name):
                 tmux_session = tmux_server.findWhere({"session_name": project_name})
@@ -403,7 +403,7 @@ def stop_project_all_instances(project_name):
                 kill_process_with_children(psutil.Process(pid))
 
         # kill the tmux server if it's running
-        tmux_server = tmuxp.Server(socket_path=get_project_meta_path(project_name) + "/.tmux_socket")
+        tmux_server = tmuxp.cli.Server(socket_path=get_project_meta_path(project_name) + "/.tmux_socket")
 
         if tmux_server.has_session(project_name):
             tmux_server.kill_session(project_name)
@@ -702,7 +702,7 @@ elif len(sys.argv) >= 2 and sys.argv[1] == "update":
 elif len(sys.argv) >= 2 and sys.argv[1] == "sessions":
     if len(sys.argv) == 2 or (len(sys.argv) == 3 and sys.argv[2] == "all"):
         for p in get_current_projects():
-            tmux_server = tmuxp.Server(socket_path=get_project_meta_path(p) + "/.tmux_socket")
+            tmux_server = tmuxp.cli.Server(socket_path=get_project_meta_path(p) + "/.tmux_socket")
 
             if is_project_running(p) and tmux_server.has_session(p):
                 print p + " instances:"
@@ -712,7 +712,7 @@ elif len(sys.argv) >= 2 and sys.argv[1] == "sessions":
                 for w in tmux_session.list_windows():
                     print "\t" + w.get("window_name")
     elif is_current_project(sys.argv[2]):
-        tmux_server = tmuxp.Server(socket_path=get_project_meta_path(sys.argv[2]) + "/.tmux_socket")
+        tmux_server = tmuxp.cli.Server(socket_path=get_project_meta_path(sys.argv[2]) + "/.tmux_socket")
 
         if is_project_running(sys.argv[2]) and tmux_server.has_session(sys.argv[2]):
             print sys.argv[2] + " instances:"
@@ -724,10 +724,10 @@ elif len(sys.argv) >= 2 and sys.argv[1] == "sessions":
     else:
         print "Unknown project " + sys.argv[2] + "!"
 elif len(sys.argv) >= 3 and sys.argv[1] == "start":
-    if not tmuxp.util.has_required_tmux_version():
-        print "tmux version too old!"
-        sys.exit()
-
+#    if not tmuxp.util.has_required_tmux_version():
+#        print "tmux version too old!"
+#        sys.exit()
+#
     if is_current_project(sys.argv[2]):
         # if not is_project_running(sys.argv[2]):
         if len(sys.argv) == 4 and sys.argv[3] == "-m":
@@ -761,7 +761,7 @@ elif len(sys.argv) >= 2 and sys.argv[1] == "stop":
         print "Unknown project " + sys.argv[2] + "!"
 elif len(sys.argv) == 3 and sys.argv[1] == "console":
     if is_current_project(sys.argv[2]):
-        tmux_server = tmuxp.Server(socket_path=get_project_meta_path(sys.argv[2]) + "/.tmux_socket")
+        tmux_server = tmuxp.cli.Server(socket_path=get_project_meta_path(sys.argv[2]) + "/.tmux_socket")
 
         if is_project_running(sys.argv[2]) and tmux_server.has_session(sys.argv[2]):
             tmux_session = tmux_server.findWhere({"session_name": sys.argv[2]})
