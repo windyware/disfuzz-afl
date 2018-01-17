@@ -30,7 +30,7 @@ if (!isset($_GET['c']) || empty($_GET['c']) || preg_match('/^([a-zA-Z0-9-]+\.)*[
 
 $clientName = $_GET['c'];
 
-if (!file_exits($dataFolder . DIRECTORY_SEPARATOR . $projectName)) {
+if (!file_exists($dataFolder . DIRECTORY_SEPARATOR . $projectName)) {
     if (!mkdir($dataFolder . DIRECTORY_SEPARATOR . $projectName)) {
         header('Content-Type: application/json');
 
